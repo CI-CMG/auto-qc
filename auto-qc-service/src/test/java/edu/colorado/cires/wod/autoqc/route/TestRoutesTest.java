@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -258,10 +259,12 @@ public class TestRoutesTest {
 
     List<AutoQcTestContextImpl> messages = saveCastFailuresQueue.getReceivedExchanges().stream()
         .map(e -> e.getIn().getBody(AutoQcTestContextImpl.class))
+        .sorted(Comparator.comparing(tc -> tc.getCast().getCastNumber()))
         .collect(Collectors.toList());
 
     List<AutoQcTestContextImpl> messages2 = testAggregateQueue.getReceivedExchanges().stream()
         .map(e -> e.getIn().getBody(AutoQcTestContextImpl.class))
+        .sorted(Comparator.comparing(tc -> tc.getCast().getCastNumber()))
         .collect(Collectors.toList());
 
     assertEquals(messages, messages2);

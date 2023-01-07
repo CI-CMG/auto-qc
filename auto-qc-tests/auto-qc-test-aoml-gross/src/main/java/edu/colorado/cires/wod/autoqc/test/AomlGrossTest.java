@@ -6,9 +6,11 @@ import edu.colorado.cires.mgg.wod.data.model.Depth;
 import edu.colorado.cires.mgg.wod.data.model.ProfileData;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnProperty(prefix = "autoqc.test.aoml-gross", name = "enabled", havingValue = "true")
 public class AomlGrossTest implements AutoQcTest {
 
   @Override

@@ -2,4 +2,9 @@ autoqc:
   pickup-dir: 'src/test/resources/wod18'
   data-dir: '../test-data'
   concurrency: 2
+  test:
+    en-bg-avail-check:
+      enabled: false
+    aoml-gross:
+      enabled: false
 

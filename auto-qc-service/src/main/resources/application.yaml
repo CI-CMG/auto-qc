@@ -4,8 +4,11 @@ autoqc:
   concurrency: ${available.processors}
   test:
     en-bg-avail-check:
+      enabled: true
       info-net-cdf-file-name: 'EN_bgcheck_info.nc'
       info-net-cdf-url: 'https://www.metoffice.gov.uk/hadobs/en4/data/EN_bgcheck_info.nc'
+    aoml-gross:
+      enabled: true
 
 camel:
   springboot:

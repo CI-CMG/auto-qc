@@ -56,6 +56,7 @@ public class FileReadProcessor {
         fileController.onNewFile(filePathPrefix);
       }
       while (reader.hasNext()) {
+        //TODO need to handle case where reading fails and clean up aggregator and file controller
         Cast cast = reader.next();
         boolean last = !reader.hasNext();
 

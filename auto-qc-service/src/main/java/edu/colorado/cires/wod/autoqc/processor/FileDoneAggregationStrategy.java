@@ -33,6 +33,9 @@ public class FileDoneAggregationStrategy implements AggregationStrategy, Predica
       }
       failureCounts.put(testName, count + 1);
     }
+    if (testContext.getCastTestResult().getException() != null) {
+      fileResult.setExceptions(fileResult.getExceptions() + 1);
+    }
   }
 
   @Override

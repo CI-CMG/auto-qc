@@ -10,17 +10,26 @@ import org.apache.commons.lang3.StringUtils;
 public class AutoQcCastTestResult {
 
   private final Set<String> castFailures = new LinkedHashSet<>();
-  private final List<Set<String>> depthFailures;
+  private List<Set<String>> depthFailures;
   private boolean skipped;
   private String skipReason;
   private String exception;
 
+  // For Jackson deserialization
+  private AutoQcCastTestResult() {
+
+  }
 
   public AutoQcCastTestResult(Cast cast) {
     depthFailures = new ArrayList<>(cast.getDepths().size());
     for (int i = 0; i < cast.getDepths().size(); i++) {
       depthFailures.add(new LinkedHashSet<>());
     }
+  }
+
+  // For Jackson deserialization
+  private void setDepthFailures(List<Set<String>> depthFailures) {
+    this.depthFailures = depthFailures;
   }
 
   public List<Set<String>> getDepthFailures() {

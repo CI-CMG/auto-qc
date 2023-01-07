@@ -82,7 +82,7 @@ public class FileRoutesTest {
 
       CastProcessingContext context = fileController.getContext("MRB/OBS/MRBO2022");
       assertEquals(new HashSet<>(Arrays.asList(21418924, 21418925, 21418926)), context.getCasts());
-      assertFalse(context.isComplete());
+      assertTrue(context.isComplete());
 
     } finally {
       Files.deleteIfExists(doneFile);

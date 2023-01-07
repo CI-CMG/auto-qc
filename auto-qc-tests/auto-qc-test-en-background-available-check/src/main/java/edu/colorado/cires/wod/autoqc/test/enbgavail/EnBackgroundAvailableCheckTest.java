@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ucar.ma2.Array;
@@ -34,6 +35,7 @@ import ucar.nc2.NetcdfFile;
 import ucar.nc2.NetcdfFiles;
 
 @Component
+@ConditionalOnProperty(prefix = "autoqc.test.en-bg-avail-check", name = "enabled", havingValue = "true")
 public class EnBackgroundAvailableCheckTest implements AutoQcTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EnBackgroundAvailableCheckTest.class);
