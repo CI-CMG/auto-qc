@@ -1,0 +1,16 @@
+autoqc:
+  pickup-dir: ''
+  data-dir: '${svc.home}/data'
+  concurrency: ${available.processors}
+  test:
+    en-bg-avail-check:
+      info-net-cdf-file-name: 'EN_bgcheck_info.nc'
+      info-net-cdf-url: 'https://www.metoffice.gov.uk/hadobs/en4/data/EN_bgcheck_info.nc'
+
+camel:
+  springboot:
+    main-run-controller: true
+
+spring:
+  main:
+    web-application-type: none

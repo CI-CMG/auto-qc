@@ -1,0 +1,5 @@
+autoqc:
+  pickup-dir: 'src/test/resources/wod18'
+  data-dir: '../test-data'
+  concurrency: 2
+
