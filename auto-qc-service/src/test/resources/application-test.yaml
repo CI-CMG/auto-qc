@@ -7,4 +7,8 @@ autoqc:
       enabled: false
     aoml-gross:
       enabled: false
+    icdc-aqc-09-local-climatology-check:
+      enabled: false
+    icdc-aqc-10-local-climatology-check:
+      enabled: false
 

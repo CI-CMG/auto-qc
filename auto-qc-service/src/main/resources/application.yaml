@@ -9,6 +9,14 @@ autoqc:
       info-net-cdf-url: 'https://www.metoffice.gov.uk/hadobs/en4/data/EN_bgcheck_info.nc'
     aoml-gross:
       enabled: true
+    icdc-aqc-09-local-climatology-check:
+      enabled: true
+      net-cdf-file-name: 'climatological_t_median_and_amd_for_aqc.nc'
+      net-cdf-url: 'https://s3-us-west-2.amazonaws.com/autoqc/climatological_t_median_and_amd_for_aqc.nc'
+    icdc-aqc-10-local-climatology-check:
+      enabled: true
+      net-cdf-file-name: 'climatological_t_median_and_amd_for_aqc.nc'
+      net-cdf-url: 'https://s3-us-west-2.amazonaws.com/autoqc/climatological_t_median_and_amd_for_aqc.nc'
 
 camel:
   springboot:

@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @Configuration
 @ConfigurationProperties("autoqc")
-public class TestProperties {
+class QcProperties {
 
   @NotNull
   @Valid

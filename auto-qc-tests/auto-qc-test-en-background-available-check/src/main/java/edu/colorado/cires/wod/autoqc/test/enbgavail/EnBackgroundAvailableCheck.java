@@ -8,6 +8,9 @@ import edu.colorado.cires.wod.autoqc.test.AutoQcTest;
 import edu.colorado.cires.wod.autoqc.test.AutoQcTestContext;
 import edu.colorado.cires.wod.autoqc.test.AutoQcTestDepthResult;
 import edu.colorado.cires.wod.autoqc.test.AutoQcTestResult;
+import edu.colorado.cires.wod.autoqc.testutil.ArrayUtils;
+import edu.colorado.cires.wod.autoqc.testutil.CastUtils;
+import edu.colorado.cires.wod.autoqc.testutil.DownloadUtil;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.slf4j.Logger;
@@ -36,15 +40,15 @@ import ucar.nc2.NetcdfFiles;
 
 @Component
 @ConditionalOnProperty(prefix = "autoqc.test.en-bg-avail-check", name = "enabled", havingValue = "true")
-public class EnBackgroundAvailableCheckTest implements AutoQcTest {
+public class EnBackgroundAvailableCheck implements AutoQcTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(EnBackgroundAvailableCheckTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EnBackgroundAvailableCheck.class);
 
   private final EnBackgroundCheckParameters parameters;
 
   @Autowired
-  public EnBackgroundAvailableCheckTest(
-      TestProperties testProperties,
+  public EnBackgroundAvailableCheck(
+      QcProperties testProperties,
       @Value("${autoqc.data-dir}") String dataDir,
       RestTemplate restTemplate
   ) throws IOException {
@@ -75,6 +79,15 @@ public class EnBackgroundAvailableCheckTest implements AutoQcTest {
     private Array obev;
     private double lonGridSize;
     private double latGridSize;
+    private double fillValue;
+
+    public double getFillValue() {
+      return fillValue;
+    }
+
+    public void setFillValue(double fillValue) {
+      this.fillValue = fillValue;
+    }
 
     public double getLonGridSize() {
       return lonGridSize;
@@ -157,6 +170,7 @@ public class EnBackgroundAvailableCheckTest implements AutoQcTest {
       parameters.setDepth(Objects.requireNonNull(nc.findVariable("depth")).read());
       parameters.setMonth(Objects.requireNonNull(nc.findVariable("month")).read());
       parameters.setClim(Objects.requireNonNull(nc.findVariable("potm_climatology")).read());
+      parameters.setFillValue(nc.findVariable("potm_climatology").findAttribute("_FillValue").getNumericValue().doubleValue());
       //TODO are these needed, fix setter
 //      parameters.setLon(Objects.requireNonNull(nc.findVariable("bgev")).read());
 //      parameters.setLon(Objects.requireNonNull(nc.findVariable("obev")).read());
@@ -230,16 +244,38 @@ public class EnBackgroundAvailableCheckTest implements AutoQcTest {
     return new GridCell(iLon, iLat);
   }
 
-  private static OptionalDouble interpolate(double z, double[] depths, double[] clim) {
+  private static boolean interpolate(double z, double[] depths, double[] clim) {
 
-    LinearInterpolator interp = new LinearInterpolator();
-    PolynomialSplineFunction f = interp.interpolate(depths, clim);
+//    LinearInterpolator interp = new LinearInterpolator();
+//    PolynomialSplineFunction f = interp.interpolate(depths, clim);
+//
+//    if (f.isValidPoint(z)) {
+//      return OptionalDouble.of(f.value(z));
+//    }
+//
+//    return OptionalDouble.empty();
 
-    if (f.isValidPoint(z)) {
-      return OptionalDouble.of(f.value(z));
-    }
+    /*
+    Original Python logic was:
 
-    return OptionalDouble.empty();
+      # Get the climatology and error variance values at this level.
+        climLevel = np.interp(z[iLevel], depths, clim, right=99999)
+        if climLevel == 99999:
+            qc[iLevel] = True # This could reject some good data if the
+                              # climatology is incomplete, but also can act as
+                              # a check that the depth of the profile is
+                              # consistent with the depth of the ocean.
+
+     This seems flawed though since a failure only happens when z > the maximum depth and the interpolated value is
+     never used.
+
+     numpy doc:
+
+     right optional float or complex corresponding to fp
+     Value to return for x > xp[-1], default is fp[-1].
+     */
+
+    return z > DoubleStream.of(depths).max().orElseThrow(() -> new IllegalStateException("depths was empty"));
   }
 
   @Override
@@ -247,13 +283,17 @@ public class EnBackgroundAvailableCheckTest implements AutoQcTest {
 
     Cast cast = context.getCast();
 
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Testing ({}): {}", getName(), cast.getCastNumber());
+    }
+
     GridCell gridCell = findGridCell(cast);
     int month = cast.getMonth() - 1;
     double[] clim;
     try {
       clim = (double[]) parameters.getClim()
           .section(Arrays.asList(
-              Range.EMPTY,
+              null,
               Range.make(gridCell.getiLat(), gridCell.getiLat()),
               Range.make(gridCell.getiLon(), gridCell.getiLon()),
               Range.make(month, month)
@@ -261,23 +301,20 @@ public class EnBackgroundAvailableCheckTest implements AutoQcTest {
     } catch (InvalidRangeException e) {
       throw new RuntimeException(e);
     }
+
+    boolean[] mask = ArrayUtils.getMask(clim, parameters.getFillValue());
+
     double[] ncDepths = (double[]) parameters.getDepth().get1DJavaArray(DataType.DOUBLE);
+
+    clim = ArrayUtils.mask(clim, mask);
+    if (clim.length == 0) {
+      return CastUtils.allBad(cast);
+    }
+
+    ncDepths = ArrayUtils.mask(ncDepths, mask);
 
     List<Depth> depths = cast.getDepths();
     List<AutoQcTestDepthResult> depthResults = new ArrayList<>(depths.size());
-
-    int zeroCount = 0;
-    for (double v : clim) {
-      if (v == 0D) {
-        zeroCount++;
-      }
-    }
-    if (zeroCount == clim.length) {
-      for (int i = 0; i < depths.size(); i++) {
-        depthResults.add(() -> true);
-      }
-      return () -> depthResults;
-    }
 
     for (Depth depth : depths) {
       Optional<ProfileData> maybeTemp = depth.getTemperature();
@@ -286,7 +323,7 @@ public class EnBackgroundAvailableCheckTest implements AutoQcTest {
       if (depth.getDepth() == null || maybeTemp.isEmpty()) {
         failed = false;
       } else {
-        failed = interpolate(depth.getDepth(), ncDepths, clim).isEmpty();
+        failed = interpolate(depth.getDepth(), ncDepths, clim);
       }
 
       depthResults.add(() -> failed);
