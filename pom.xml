@@ -20,6 +20,7 @@
     <module>auto-qc-test-interface</module>
     <module>auto-qc-tests</module>
     <module>auto-qc-service</module>
+    <module>auto-qc-tests/auto-qc-test-aoml-spike</module>
   </modules>
 
   <properties>

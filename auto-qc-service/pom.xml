@@ -15,9 +15,15 @@
 
   <dependencies>
 
+
     <dependency>
       <groupId>edu.colorado.cires.wod</groupId>
-      <artifactId>auto-qc-test-en-background-available-check</artifactId>
+      <artifactId>auto-qc-test-aoml-climatology</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.colorado.cires.wod</groupId>
+      <artifactId>auto-qc-test-aoml-gradient</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -25,6 +31,22 @@
       <artifactId>auto-qc-test-aoml-gross</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>edu.colorado.cires.wod</groupId>
+      <artifactId>auto-qc-test-aoml-spike</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.colorado.cires.wod</groupId>
+      <artifactId>auto-qc-test-argo-impossible-date</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.colorado.cires.wod</groupId>
+      <artifactId>auto-qc-test-en-background-available-check</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
 
 
     <dependency>

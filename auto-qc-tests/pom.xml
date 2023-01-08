@@ -20,6 +20,9 @@
     <module>auto-qc-test-icdc-aqc-09-local-climatology-check</module>
     <module>auto-qc-test-icdc-aqc-10-local-climatology-check</module>
     <module>auto-qc-test-iquod-bottom</module>
+    <module>auto-qc-test-aoml-gradient</module>
+    <module>auto-qc-test-aoml-climatology</module>
+    <module>auto-qc-test-argo-impossible-date</module>
   </modules>
 
   <dependencies>

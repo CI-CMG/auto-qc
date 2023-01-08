@@ -3,12 +3,22 @@ autoqc:
   data-dir: '${svc.home}/data'
   concurrency: ${available.processors}
   test:
+    aoml-climatology:
+      net-cdf-url: 'https://auto-qc-data.s3.us-west-2.amazonaws.com/woa13_00_025.nc'
+      net-cdf-file-name: 'woa13_00_025.nc'
+      enabled: true
+    aoml-gradient:
+      enabled: true
+    aoml-gross:
+      enabled: true
+    aoml-spike:
+      enabled: true
+    argo-impossible-date:
+      enabled: true
     en-bg-avail-check:
       enabled: true
       info-net-cdf-file-name: 'EN_bgcheck_info.nc'
       info-net-cdf-url: 'https://www.metoffice.gov.uk/hadobs/en4/data/EN_bgcheck_info.nc'
-    aoml-gross:
-      enabled: true
     icdc-aqc-09-local-climatology-check:
       enabled: true
       net-cdf-file-name: 'climatological_t_median_and_amd_for_aqc.nc'

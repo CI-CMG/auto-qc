@@ -3,9 +3,17 @@ autoqc:
   data-dir: '../test-data'
   concurrency: 2
   test:
-    en-bg-avail-check:
+    aoml-climatology:
+      enabled: false
+    aoml-gradient:
       enabled: false
     aoml-gross:
+      enabled: false
+    aoml-spike:
+      enabled: false
+    argo-impossible-date:
+      enabled: false
+    en-bg-avail-check:
       enabled: false
     icdc-aqc-09-local-climatology-check:
       enabled: false
