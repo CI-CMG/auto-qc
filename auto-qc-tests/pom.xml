@@ -25,6 +25,7 @@
     <module>auto-qc-test-argo-impossible-date</module>
     <module>auto-qc-test-argo-impossible-location</module>
     <module>auto-qc-test-argo-regional-range</module>
+    <module>auto-qc-test-aoml-spike</module>
   </modules>
 
   <dependencies>

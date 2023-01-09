@@ -223,25 +223,38 @@ public class EnBackgroundAvailableCheck implements AutoQcTest {
     return (int) Math.round(Math.asin(Math.sin(latitude)) / (Math.PI / 180D));
   }
 
+  // how Python does mod with negative numbers
+  private static long mod(long a, long b) {
+    long c = a % b;
+    return (c < 0) ? c + b : c;
+  }
+
   private GridCell findGridCell(Cast cast) {
 
-    int iLon = (int) (Math.round((cast.getLongitude() - parameters.getLon().getDouble(0)) / parameters.getLonGridSize()) % parameters.getLon()
-        .getSize());
-    int iLat = (int) Math.round((normalizeLatitude(cast.getLatitude()) - parameters.getLat().getDouble(0)) / parameters.getLatGridSize());
+    double lon = cast.getLongitude();
+    Array grid = parameters.getLon();
+    long nlon = grid.getSize();
+    int ilon = (int) mod(Math.round((lon - grid.getDouble(0)) / (grid.getDouble(1) - grid.getDouble(0))), nlon);
+
+    if (ilon < 0 || ilon >= nlon) {
+      throw new IllegalStateException("Longitude is out of range: " + ilon + " " + nlon);
+    }
+
+    double lat = cast.getLatitude();
+    lat = normalizeLatitude(lat);
+    grid = parameters.getLat();
+    long nlat = grid.getSize();
+    int ilat = (int) Math.round((lat - grid.getDouble(0)) / (grid.getDouble(1) - grid.getDouble(0)));
     // Checks for edge case where lat is ~90.
-    if (iLat == parameters.getLat().getSize()) {
-      iLat = iLat - 1;
+    if (ilat == nlat) {
+      ilat -= 1;
     }
 
-    if (iLon < 0 || iLon > parameters.getLon().getSize()) {
-      throw new IllegalStateException("Longitude is out of range: " + cast.getLongitude() + " " + iLon);
+    if (ilat < 0 || ilat >= nlat) {
+      throw new IllegalStateException("Latitude is out of range: " + ilat + " " + nlat);
     }
 
-    if (iLat < 0 || iLat > parameters.getLat().getSize()) {
-      throw new IllegalStateException("Latitude is out of range: " + cast.getLatitude() + " " + iLat);
-    }
-
-    return new GridCell(iLon, iLat);
+    return new GridCell(ilon, ilat);
   }
 
   private static boolean interpolate(double z, double[] depths, double[] clim) {

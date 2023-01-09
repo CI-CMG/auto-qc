@@ -15,8 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-@Component
-@ConditionalOnProperty(prefix = "autoqc.test.iquod-bottom", name = "enabled", havingValue = "true")
+//TODO
+//@Component
+//@ConditionalOnProperty(prefix = "autoqc.test.iquod-bottom", name = "enabled", havingValue = "true")
 public class IQuodBottomQc implements AutoQcTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IQuodBottomQc.class);

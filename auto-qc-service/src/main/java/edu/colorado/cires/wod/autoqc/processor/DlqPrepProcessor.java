@@ -44,7 +44,7 @@ public class DlqPrepProcessor implements Processor {
     AutoQcTestContextImpl testContext = exchange.getIn().getBody(AutoQcTestContextImpl.class);
     testContext.getCastTestResult().setException(event + ":\n" + details);
 
-    LOGGER.error("Error caught: {}", event);
+    LOGGER.error("Error caught: {}", details);
 
   }
 }

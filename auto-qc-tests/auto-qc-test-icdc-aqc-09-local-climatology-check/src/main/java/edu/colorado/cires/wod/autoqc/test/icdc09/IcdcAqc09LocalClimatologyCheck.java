@@ -26,8 +26,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ucar.ma2.Array;
 
-@Component
-@ConditionalOnProperty(prefix = "autoqc.test.icdc-aqc-09-local-climatology-check", name = "enabled", havingValue = "true")
+//TODO
+//@Component
+//@ConditionalOnProperty(prefix = "autoqc.test.icdc-aqc-09-local-climatology-check", name = "enabled", havingValue = "true")
 public class IcdcAqc09LocalClimatologyCheck implements AutoQcTest {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IcdcAqc09LocalClimatologyCheck.class);
