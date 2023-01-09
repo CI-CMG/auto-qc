@@ -43,6 +43,16 @@
     </dependency>
     <dependency>
       <groupId>edu.colorado.cires.wod</groupId>
+      <artifactId>auto-qc-test-argo-impossible-location</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.colorado.cires.wod</groupId>
+      <artifactId>auto-qc-test-argo-regional-range</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.colorado.cires.wod</groupId>
       <artifactId>auto-qc-test-en-background-available-check</artifactId>
       <version>${project.version}</version>
     </dependency>

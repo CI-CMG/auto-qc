@@ -15,6 +15,10 @@ autoqc:
       enabled: true
     argo-impossible-date:
       enabled: true
+    argo-impossible-location:
+      enabled: true
+    argo-regional-range:
+      enabled: true
     en-bg-avail-check:
       enabled: true
       info-net-cdf-file-name: 'EN_bgcheck_info.nc'

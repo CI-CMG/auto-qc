@@ -23,6 +23,8 @@
     <module>auto-qc-test-aoml-gradient</module>
     <module>auto-qc-test-aoml-climatology</module>
     <module>auto-qc-test-argo-impossible-date</module>
+    <module>auto-qc-test-argo-impossible-location</module>
+    <module>auto-qc-test-argo-regional-range</module>
   </modules>
 
   <dependencies>

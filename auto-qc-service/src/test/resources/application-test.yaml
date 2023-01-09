@@ -13,6 +13,10 @@ autoqc:
       enabled: false
     argo-impossible-date:
       enabled: false
+    argo-impossible-location:
+      enabled: false
+    argo-regional-range:
+      enabled: false
     en-bg-avail-check:
       enabled: false
     icdc-aqc-09-local-climatology-check:

@@ -11,7 +11,14 @@
   </parent>
 
 
-  <artifactId>auto-qc-test-argo-impossible-date</artifactId>
+  <artifactId>auto-qc-test-argo-regional-range</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.locationtech.jts</groupId>
+      <artifactId>jts-core</artifactId>
+    </dependency>
+  </dependencies>
 
 
 </project>
