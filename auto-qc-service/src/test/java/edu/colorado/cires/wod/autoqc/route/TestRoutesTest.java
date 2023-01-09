@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import edu.colorado.cires.mgg.wod.data.model.Cast;
@@ -13,6 +14,7 @@ import edu.colorado.cires.mgg.wod.data.reader.BufferedCharReader;
 import edu.colorado.cires.mgg.wod.data.reader.CastFileReader;
 import edu.colorado.cires.wod.autoqc.model.AutoQcTestContextImpl;
 import edu.colorado.cires.wod.autoqc.service.FileController;
+import edu.colorado.cires.wod.autoqc.service.ProfileFilter;
 import edu.colorado.cires.wod.autoqc.service.TestSupplier;
 import edu.colorado.cires.wod.autoqc.test.AutoQcTest;
 import edu.colorado.cires.wod.autoqc.test.AutoQcTestContext;
@@ -64,6 +66,9 @@ public class TestRoutesTest {
   @MockBean
   private TestSupplier testSupplier;
 
+  @MockBean
+  private ProfileFilter profileFilter;
+
   @Autowired
   private ProducerTemplate producerTemplate;
 
@@ -73,6 +78,7 @@ public class TestRoutesTest {
   @BeforeEach
   public void setup() {
     fileController.reset();
+    when(profileFilter.allowProfile(any())).thenReturn(true);
   }
 
   @AfterEach
